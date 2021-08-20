@@ -45,18 +45,17 @@ void clearCharacterBuffer(void)
 float readCoefficient(char coefficientDesignation)
 {
     float number = 0;
-    int nextChar  = 0;
 
     printf("%c: ", coefficientDesignation);
-    int isCorrect = scanf("%f", &number);
+    int isCorrectInput = scanf("%f", &number);
 
-    while (isCorrect == 0 || getchar() != '\n')
+    while (isCorrectInput == 0 || getchar() != '\n')
     {
         clearCharacterBuffer();
 
         printf("Please, enter the correct value for the coefficient\n");
         printf("%c: ", coefficientDesignation);
-        isCorrect = scanf("%f", &number);
+        isCorrectInput = scanf("%f", &number);
     }
 
     return number;
