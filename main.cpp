@@ -4,7 +4,6 @@
 #include <math.h>
 
 const int INF_ROOTS = 3;
-const int MAX_SIZE = 1000;
 const float PRECISION = 0.001f;
 
 float readCoefficient(char coefficientDesignation);
@@ -37,50 +36,19 @@ int main()
 
 float readCoefficient(char coefficientDesignation)
 {
-    int numberEnteredCharacters = 0;
-    int boolFlag = 1;
     float number = 0;
     int characterInputStream  = 0;
-    char userInput[MAX_SIZE];
 
-    while(boolFlag)
+    printf("%c: ", coefficientDesignation);
+    int numberEnteredCharacters = scanf("%f", &number);
+
+    while (numberEnteredCharacters == 0 || getchar() != '\n')
     {
-        numberEnteredCharacters = 0;
+        while ((characterInputStream = getchar()) != '\n');
 
-        for(int i = 0; i < MAX_SIZE; i++)
-        {
-            userInput[i] = 'a';
-        }
-
-        boolFlag = 0;
-
+        printf("Please, enter the correct value for the coefficient\n");
         printf("%c: ", coefficientDesignation);
-
-        while((characterInputStream = getchar()) != '\n')
-        {
-            if((int)'0' > characterInputStream || (int)'9' < characterInputStream)
-            {
-                boolFlag = 1;
-            }
-
-            if(characterInputStream == (int)' ')
-            {
-                boolFlag = 1;
-                continue;
-            }
-
-            userInput[numberEnteredCharacters] = (char)characterInputStream;
-            numberEnteredCharacters += 1;
-        }
-
-        if(boolFlag == 1 || numberEnteredCharacters == 0)
-        {
-            boolFlag = 1;
-            printf("Please, enter the correct value for the coefficient\n");
-            continue;
-        }
-
-        number = (float)atof(userInput);
+        numberEnteredCharacters = scanf("%f", &number);
     }
 
     return number;
@@ -88,7 +56,7 @@ float readCoefficient(char coefficientDesignation)
 
 void outputAnswer(float x1, float x2, int rootsCount)
 {
-    switch(rootsCount)
+    switch (rootsCount)
     {
         case 0:
         {
@@ -129,23 +97,23 @@ int isEqualZero(float number)
 
 void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount)
 {
-    assert(x1 != 0);
-    assert(x2 != 0);
-    assert(rootsCount != 0);
+    assert(x1 != nullptr);
+    assert(x2 != nullptr);
+    assert(rootsCount != nullptr);
 
     *x1 = 0;
     *x2 = 0;
 
-    if(!isEqualZero(a))
+    if (!isEqualZero(a))
     {
         float D = b*b - 4*a*c;
         float multiplier = 1/(a*2);
 
-        if(isLessZero(D))
+        if (isLessZero(D))
         {
             *rootsCount = 0;
         }
-        else if(isEqualZero(D))
+        else if (isEqualZero(D))
         {
             *x1 = -b*multiplier;
             *rootsCount = 1;
@@ -160,15 +128,15 @@ void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int
     }
     else
     {
-        if(isEqualZero(b) && isEqualZero(c))
+        if (isEqualZero(b) && isEqualZero(c))
         {
             *rootsCount = INF_ROOTS;
         }
-        else if(isEqualZero(b) && !isEqualZero(c))
+        else if (isEqualZero(b) && !isEqualZero(c))
         {
             *rootsCount = 0;
         }
-        else if(!isEqualZero(b) && isEqualZero(c))
+        else if (!isEqualZero(b) && isEqualZero(c))
         {
             *rootsCount = 1;
         }
