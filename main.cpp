@@ -6,7 +6,7 @@
 const int INF_ROOTS = 3;
 const float PRECISION = 0.001f;
 
-void clearCharacterBuffer(void);
+void clearInputBuffer(void);
 float readCoefficient(char coefficientDesignation);
 void outputAnswer(float x1, float x2, int rootsCount);
 int isLessZero(float number);
@@ -35,11 +35,9 @@ int main()
     return 0;
 }
 
-void clearCharacterBuffer(void)
+void clearInputBuffer(void)
 {
-    int nextChar = 0;
-
-    while((nextChar = getchar()) != '\n');
+    while (getchar() != '\n');
 }
 
 float readCoefficient(char coefficientDesignation)
@@ -51,7 +49,7 @@ float readCoefficient(char coefficientDesignation)
 
     while (isCorrectInput == 0 || getchar() != '\n')
     {
-        clearCharacterBuffer();
+        clearInputBuffer();
 
         printf("Please, enter the correct value for the coefficient\n");
         printf("%c: ", coefficientDesignation);
@@ -154,5 +152,3 @@ void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int
         }
     }
 }
-
-
