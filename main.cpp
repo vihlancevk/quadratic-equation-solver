@@ -4,7 +4,7 @@
 #include <math.h>
 
 const int INF_ROOTS = 3;
-const int MAX_SIZE = 3;
+const int MAX_SIZE = 1000;
 const float PRECISION = 0.001f;
 
 float readCoefficient(char coefficientDesignation);
