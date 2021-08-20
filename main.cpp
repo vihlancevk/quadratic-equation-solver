@@ -6,6 +6,7 @@
 const int INF_ROOTS = 3;
 const float PRECISION = 0.001f;
 
+void clearCharacterBuffer(void);
 float readCoefficient(char coefficientDesignation);
 void outputAnswer(float x1, float x2, int rootsCount);
 int isLessZero(float number);
@@ -34,21 +35,28 @@ int main()
     return 0;
 }
 
+void clearCharacterBuffer(void)
+{
+    int nextChar = 0;
+
+    while((nextChar = getchar()) != '\n');
+}
+
 float readCoefficient(char coefficientDesignation)
 {
     float number = 0;
-    int characterInputStream  = 0;
+    int nextChar  = 0;
 
     printf("%c: ", coefficientDesignation);
-    int numberEnteredCharacters = scanf("%f", &number);
+    int isCorrect = scanf("%f", &number);
 
-    while (numberEnteredCharacters == 0 || getchar() != '\n')
+    while (isCorrect == 0 || getchar() != '\n')
     {
-        while ((characterInputStream = getchar()) != '\n');
+        clearCharacterBuffer();
 
         printf("Please, enter the correct value for the coefficient\n");
         printf("%c: ", coefficientDesignation);
-        numberEnteredCharacters = scanf("%f", &number);
+        isCorrect = scanf("%f", &number);
     }
 
     return number;
