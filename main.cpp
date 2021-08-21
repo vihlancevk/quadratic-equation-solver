@@ -6,11 +6,12 @@
 const int INF_ROOTS = 3;
 const float PRECISION = 0.001f;
 
-void clearInputBuffer(void);
+void clearInputBuffer();
 float readCoefficient(char coefficientDesignation);
 void outputAnswer(float x1, float x2, int rootsCount);
 int isLessZero(float number);
 int isEqualZero(float number);
+void solveLinearEquation(float b, float c, float *x1, int *rootsCount);
 void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount);
 
 int main()
@@ -34,12 +35,20 @@ int main()
 
     return 0;
 }
-
-void clearInputBuffer(void)
+//-------------------------------------------------------------------------------------------
+//! Очистка ввода с консоли.
+//-------------------------------------------------------------------------------------------
+void clearInputBuffer()
 {
     while (getchar() != '\n');
 }
-
+//-------------------------------------------------------------------------------------------
+//! Считывание с консоли введённого коэффициента квадратного уравнения.
+//!
+//! @param [in] coefficientDesignation буквенное обозначение вводимого коэффициента.
+//!
+//! @return введённое с консоли число.
+//-------------------------------------------------------------------------------------------
 float readCoefficient(char coefficientDesignation)
 {
     float number = 0;
@@ -58,7 +67,13 @@ float readCoefficient(char coefficientDesignation)
 
     return number;
 }
-
+//-------------------------------------------------------------------------------------------
+//! Вывод решения квадратного уравнения на экран консоли.
+//!
+//! @param [in] x1 первый корень уравнения
+//! @param [in] x2 второй корень уравнения
+//! @param [in] rootsCount количество корней уравнения
+//-------------------------------------------------------------------------------------------
 void outputAnswer(float x1, float x2, int rootsCount)
 {
     switch (rootsCount)
@@ -89,17 +104,65 @@ void outputAnswer(float x1, float x2, int rootsCount)
         }
     }
 }
-
+//-------------------------------------------------------------------------------------------
+//! Сравнения введённого с консоли числа с нулём.
+//!
+//! @param [in] number число, которое нужно сравнить с нулём
+//!
+//! @return 1 - если число меньше нуля;
+//!         0 - если число больше или равно нулю.
+//-------------------------------------------------------------------------------------------
 int isLessZero(float number)
 {
     return number < 0 - PRECISION;
 }
-
+//-------------------------------------------------------------------------------------------
+//! Сравнения введённого с консоли числа с нулём.
+//!
+//! @param [in] number число, которое нужно сравнить с нулём
+//!
+//! @return 1 - равно нулю;
+//!         0 - если число меньше или больше нуля.
+//-------------------------------------------------------------------------------------------
 int isEqualZero(float number)
 {
     return number >= 0 - PRECISION && number <= 0 + PRECISION;
 }
-
+//-------------------------------------------------------------------------------------------
+//! Вычисление корней линейного уравнения
+//!
+//! @param [in] b, c коэффициенты линейного уравнения
+//! @param [out] x1 корень линейного уравнения
+//! @param [out] rootsCount количество корней линейного уравнения
+//-------------------------------------------------------------------------------------------
+void solveLinearEquation(float b, float c, float *x1, int *rootsCount)
+{
+    if (!isEqualZero(b) && !isEqualZero(c))
+    {
+        *x1 = -c/b;
+        *rootsCount = 1;
+    }
+    else if (!isEqualZero(b) && isEqualZero(c))
+    {
+        *x1 = 0;
+        *rootsCount = 1;
+    }
+    else if (isEqualZero(b) && !isEqualZero(c))
+    {
+        *rootsCount = 0;
+    }
+    else
+    {
+        *rootsCount = INF_ROOTS;
+    }
+}
+//-------------------------------------------------------------------------------------------
+//! Вычисление корней квадратного уравнения
+//!
+//! @param [in] a, b, c коэффициенты квадратного уравнения
+//! @param [out] x1, x2 корни квадратного уравнения
+//! @param [out] rootsCount количество корней квадратного уравнения
+//-------------------------------------------------------------------------------------------
 void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount)
 {
     assert(x1 != nullptr);
@@ -133,22 +196,6 @@ void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int
     }
     else
     {
-        if (isEqualZero(b) && isEqualZero(c))
-        {
-            *rootsCount = INF_ROOTS;
-        }
-        else if (isEqualZero(b) && !isEqualZero(c))
-        {
-            *rootsCount = 0;
-        }
-        else if (!isEqualZero(b) && isEqualZero(c))
-        {
-            *rootsCount = 1;
-        }
-        else
-        {
-            *x1 = -c/b;
-            *rootsCount = 1;
-        }
+        solveLinearEquation(b, c, x1, rootsCount);
     }
 }
