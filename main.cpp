@@ -9,12 +9,14 @@
 //------------------------------------------------------------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h >
 #include <assert.h>
 #include <math.h>
 
 const int INF_ROOTS = -1;
 const float PRECISION = 0.001f;
 
+void testProgram();
 void clearInputBuffer();
 float readCoefficient(char coefficientSymbol);
 void outputAnswer(float x1, float x2, int rootsCount);
@@ -24,15 +26,16 @@ void testIsEqualZero(float number, bool rightAnswer);
 void solveLinearEquation(float a, float b, float *x, int *rootsCount);
 void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount);
 
-int main()
+int main(int argc, char *argv[])
 {
-    testIsEqualZero(-1.0f, false);
-    testIsEqualZero(-0.0011f, false);
-    testIsEqualZero(-0.001f, true);
-    testIsEqualZero(0.0f, true);
-    testIsEqualZero(0.001f, true);
-    testIsEqualZero(0.0011f, false);
-    testIsEqualZero(1.0f, false);
+    for(int i = 0; i < argc; i += 1)
+    {
+        if (!strcmp(argv[i], "--test") || !strcmp(argv[i], "-t"))
+        {
+            testProgram();
+            break;
+        }
+    }
 
     float a = 0, b = 0, c = 0;
 
@@ -50,6 +53,17 @@ int main()
     outputAnswer(x1, x2, rootsCount);
 
     return 0;
+}
+
+void testProgram()
+{
+    testIsEqualZero(-1.0f, false);
+    testIsEqualZero(-0.0011f, false);
+    testIsEqualZero(-0.001f, true);
+    testIsEqualZero(0.0f, true);
+    testIsEqualZero(0.001f, true);
+    testIsEqualZero(0.0011f, false);
+    testIsEqualZero(1.0f, false);
 }
 
 //------------------------------------------------------------------------------------------
@@ -182,7 +196,7 @@ bool isEqualZero(float number)
 
 void testIsEqualZero(float number, bool rightAnswer)
 {
-    bool returnAnswer =  isEqualZero(number);
+    bool returnAnswer = isEqualZero(number);
 
     if(returnAnswer == rightAnswer)
     {
