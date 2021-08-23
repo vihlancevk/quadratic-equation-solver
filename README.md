@@ -1,5 +1,5 @@
 # Документация
-https://vihlancevk.github.io/quadratic-equation-solver/
+https://vihlancevk.github.io/quadratic-equation-solver/main_8cpp.html
 
 ## quadratic-equation-solver
 Простой калькулятор для решения квадратного уравнения.
