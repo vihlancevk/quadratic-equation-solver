@@ -16,26 +16,24 @@
 const int INF_ROOTS = -1;
 const float PRECISION = 0.001f;
 
+void processCommandLineArguments(int argc, char *argv[]);
 void testProgram();
 void clearInputBuffer();
 float readCoefficient(char coefficientSymbol);
 void outputAnswer(float x1, float x2, int rootsCount);
 bool isLessZero(float number);
+void testIsLessZero(float number, bool rightAnswer);
 bool isEqualZero(float number);
 void testIsEqualZero(float number, bool rightAnswer);
 void solveLinearEquation(float a, float b, float *x, int *rootsCount);
+void testSolveLinearEquation(float a, float b, float rightAnswerX, int rightAnswerRootsCount);
 void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount);
+void testSolveQuadraticEquation(float a, float b, float c, float rightAnswerX1,
+                                float rightAnswerX2, int rightAnswerRootsCount);
 
 int main(int argc, char *argv[])
 {
-    for(int i = 0; i < argc; i += 1)
-    {
-        if (!strcmp(argv[i], "--test") || !strcmp(argv[i], "-t"))
-        {
-            testProgram();
-            break;
-        }
-    }
+    processCommandLineArguments(argc, argv);
 
     float a = 0, b = 0, c = 0;
 
@@ -55,8 +53,37 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+//------------------------------------------------------------------------------------------
+//! @brief Обработка аргументов командной строки.
+//!
+//! @param [in] argc количество аргументов командной строки.
+//! @param [in] argv массив аргументов командной строки.
+//------------------------------------------------------------------------------------------
+void processCommandLineArguments(int argc, char *argv[])
+{
+    for (int i = 0; i < argc; i += 1)
+    {
+        if (!strcmp(argv[i], "--test") || !strcmp(argv[i], "-t"))
+        {
+            testProgram();
+            break;
+        }
+    }
+}
+
+//------------------------------------------------------------------------------------------
+//! @brief Тестирование программы на коректность работы.
+//------------------------------------------------------------------------------------------
 void testProgram()
 {
+    testIsLessZero(-1.0f, true);
+    testIsLessZero(-0.0011f, true);
+    testIsLessZero(-0.001f, false);
+    testIsLessZero(0.0f, false);
+    testIsLessZero(0.001f, false);
+    testIsLessZero(0.0011f, false);
+    testIsLessZero(1.0f, false);
+
     testIsEqualZero(-1.0f, false);
     testIsEqualZero(-0.0011f, false);
     testIsEqualZero(-0.001f, true);
@@ -64,6 +91,15 @@ void testProgram()
     testIsEqualZero(0.001f, true);
     testIsEqualZero(0.0011f, false);
     testIsEqualZero(1.0f, false);
+
+    testSolveLinearEquation(0, 0, 0, INF_ROOTS);
+    testSolveLinearEquation(0, 1, 0, 0);
+    testSolveLinearEquation(1, 1, -1, 1);
+
+    testSolveQuadraticEquation(1, 1, 1, 0, 0, 0);
+    testSolveQuadraticEquation(0, 0, 0, 0, 0, INF_ROOTS);
+    testSolveQuadraticEquation(1, 2, 1, -1, 0, 1);
+    testSolveQuadraticEquation(1, 5, -6, -6, 1, 2);
 }
 
 //------------------------------------------------------------------------------------------
@@ -178,6 +214,30 @@ bool isLessZero(float number)
 }
 
 //------------------------------------------------------------------------------------------
+//! @brief Тестирование функции isLessZero на корректность работы.
+//!
+//! @param [in] number число, которое нужно сравнить с нулём.
+//! @param [in] rightAnswer ответ, который должна вернуть функция isLessZero при корректной
+//!             работе, если в качестве аргумента ей передать число number.
+//!
+//! @note в случае коректной работы функции isLessZero, в консоль будет выведенно
+//!       соответствующее сообщение.
+//------------------------------------------------------------------------------------------
+void testIsLessZero(float number, bool rightAnswer)
+{
+    bool returnAnswer = isLessZero(number);
+
+    if(returnAnswer == rightAnswer)
+    {
+        printf("[correct] isLessZero(%.4f) returned: %d, expected: %d\n", number, returnAnswer, rightAnswer);
+    }
+    else
+    {
+        printf("[incorrect] isLessZero(%.4f) returned: %d, expected: %d\n", number, returnAnswer, rightAnswer);
+    }
+}
+
+//------------------------------------------------------------------------------------------
 //! @brief Сравнения числа с нулём.
 //!
 //! @param [in] number число, которое нужно сравнить с нулём.
@@ -194,6 +254,16 @@ bool isEqualZero(float number)
     return number >= 0 - PRECISION && number <= 0 + PRECISION;
 }
 
+//------------------------------------------------------------------------------------------
+//! @brief Тестирование функции isEqualZero на корректность работы.
+//!
+//! @param [in] number число, которое нужно сравнить с нулём.
+//! @param [in] rightAnswer ответ, который должна вернуть функция isEqualZero при корректной
+//!             работе, если в качестве аргумента ей передать число number.
+//!
+//! @note в случае коректной работы функции isEqualZero, в консоль будет выведенно
+//!       соответствующее сообщение.
+//------------------------------------------------------------------------------------------
 void testIsEqualZero(float number, bool rightAnswer)
 {
     bool returnAnswer = isEqualZero(number);
@@ -235,6 +305,39 @@ void solveLinearEquation(float a, float b, float *x, int *rootsCount)
     else
     {
         *rootsCount = INF_ROOTS;
+    }
+}
+
+//------------------------------------------------------------------------------------------
+//! @brief Тестирование функции solveLinearEquation,
+//!        решающей линеные уравнения вида a*x + b = 0, на корректность работы.
+//!
+//! @param [in] a линейный коэффициент линейного уравнения.
+//! @param [in] b коэффициент линейного уравнения (свободный член).
+//! @param [in] rightAnswerX корень, который должна вернуть функция
+//!        solveLinearEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a и b.
+//! @param [in] rightAnswerRootsCount количество кореней, которые должна вернуть функция
+//!        solveLinearEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a и b.
+//!
+//! @note в случае коректной работы функции solveLinearEquation, в консоль будет выведенно
+//!       соответствующее сообщение.
+//------------------------------------------------------------------------------------------
+void testSolveLinearEquation(float a, float b, float rightAnswerX, int rightAnswerRootsCount)
+{
+    float returnAnswerX = 0;
+    int returnAnswerRootsCount = 0;
+    solveLinearEquation(a, b, &returnAnswerX, &returnAnswerRootsCount);
+    if (isEqualZero(returnAnswerX - rightAnswerX) && returnAnswerRootsCount == rightAnswerRootsCount)
+    {
+        printf("[correct] solveLinearEquation(%.3f, %.3f) returned: %.3f and %d, expected: %.3f and %d\n",
+               a, b, returnAnswerX, returnAnswerRootsCount, rightAnswerX, rightAnswerRootsCount);
+    }
+    else
+    {
+        printf("[incorrect] solveLinearEquation(%.3f, %.3f, 0, 0) returned: %.3f and %d, expected: %.3f and %d\n",
+               a, b, returnAnswerX, returnAnswerRootsCount, rightAnswerX, rightAnswerRootsCount);
     }
 }
 
@@ -282,5 +385,48 @@ void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int
     else
     {
         solveLinearEquation(b, c, x1, rootsCount);
+    }
+}
+
+//------------------------------------------------------------------------------------------
+//! @brief Тестирование функции solveQuadraticEquation,
+//!        решающей квадратные уравнения вида a*x^2 + b*x + c = 0, на корректность работы.
+//!
+//! @param [in] a коэффициент квадратного уравнения (старший коэффициент).
+//! @param [in] b коэффициент квадратного уравнения (коэффициент при x).
+//! @param [in] c коэффициент квадратного уравнения (свободный член).
+//! @param [in] rightAnswerX1 первый корень, который должна вернуть функция
+//!        solveQuadraticEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a, b и c.
+//! @param [in] rightAnswerX2 второй корень, который должна вернуть функция
+//!        solveQuadraticEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a, b и c.
+//! @param [in] rightAnswerRootsCount количество кореней, которые должна вернуть функция
+//!        solveQuadraticEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a, b и c.
+//!
+//! @note в случае коректной работы функции solveQuadraticEquation, в консоль будет выведенно
+//!       соответствующее сообщение.
+//------------------------------------------------------------------------------------------
+void testSolveQuadraticEquation(float a, float b, float c, float rightAnswerX1, float rightAnswerX2, int rightAnswerRootsCount)
+{
+    float returnAnswerX1 = 0;
+    float returnAnswerX2 = 0;
+    int returnAnswerRootsCount = 0;
+    solveQuadraticEquation(a, b, c, &returnAnswerX1, &returnAnswerX2, &returnAnswerRootsCount);
+    if (isEqualZero(returnAnswerX1 - rightAnswerX1) && isEqualZero(returnAnswerX2 - rightAnswerX2)
+        && returnAnswerRootsCount == rightAnswerRootsCount)
+    {
+        printf("[correct] solveQuadraticEquation(%.3f, %.3f, %.3f, 0, 0, 0) returned: %.3f, %.3f and %d, "
+               "expected: %.3f, %.3f and %d\n",
+               a, b, c, returnAnswerX1, returnAnswerX2, returnAnswerRootsCount,
+               rightAnswerX1, rightAnswerX2, rightAnswerRootsCount);
+    }
+    else
+    {
+        printf("[incorrect] solveQuadraticEquation(%.3f, %.3f, %.3f, 0, 0, 0) returned: %.3f, %.3f and %d, "
+               "expected: %.3f, %.3f and %d\n",
+               a, b, c, returnAnswerX1, returnAnswerX2, returnAnswerRootsCount,
+               rightAnswerX1, rightAnswerX2, rightAnswerRootsCount);
     }
 }
