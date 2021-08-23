@@ -8,6 +8,6 @@
 
 [![Screen1.png](https://i.postimg.cc/7htDGP42/Screen1.png)](https://postimg.cc/5QzDDV64)
 
-После чего в консоль будет выведо сообщение, содержащее решение данного квадратного уравнения;
+После чего в консоль будет выведо сообщение, содержащее решение данного квадратного уравнения.
 
 [![Screen2.png](https://i.postimg.cc/WbtsRZm6/Screen2.png)](https://postimg.cc/hfFkTf5f)
