@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------------------------
-//! @brief Высисление корней квадратного уравенения.
+//! @brief Вычисление корней квадратного уравнения.
 //!
 //! @author Костя Вихлянцев (https://github.com/vihlancevk/quadratic-equation-solver)
 //! @file main.cpp
@@ -20,11 +20,20 @@ float readCoefficient(char coefficientSymbol);
 void outputAnswer(float x1, float x2, int rootsCount);
 bool isLessZero(float number);
 bool isEqualZero(float number);
+void testIsEqualZero(float number, bool rightAnswer);
 void solveLinearEquation(float a, float b, float *x, int *rootsCount);
 void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount);
 
 int main()
 {
+    testIsEqualZero(-1.0f, false);
+    testIsEqualZero(-0.0011f, false);
+    testIsEqualZero(-0.001f, true);
+    testIsEqualZero(0.0f, true);
+    testIsEqualZero(0.001f, true);
+    testIsEqualZero(0.0011f, false);
+    testIsEqualZero(1.0f, false);
+
     float a = 0, b = 0, c = 0;
 
     printf("Enter coefficients in quadratic equation in format a*x^2 + b*x + c = 0\n");
@@ -169,6 +178,20 @@ bool isLessZero(float number)
 bool isEqualZero(float number)
 {
     return number >= 0 - PRECISION && number <= 0 + PRECISION;
+}
+
+void testIsEqualZero(float number, bool rightAnswer)
+{
+    bool returnAnswer =  isEqualZero(number);
+
+    if(returnAnswer == rightAnswer)
+    {
+        printf("[correct] isEqualZero(%.4f) returned: %d, expected: %d\n", number, returnAnswer, rightAnswer);
+    }
+    else
+    {
+        printf("[incorrect] isEqualZero(%.4f) returned: %d, expected: %d\n", number, returnAnswer, rightAnswer);
+    }
 }
 
 //------------------------------------------------------------------------------------------
