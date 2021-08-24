@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
     c = readCoefficient('c');
 
     float x1 = 0, x2 = 0;
-
     int rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
 
     outputAnswer(x1, x2, rootsCount);
