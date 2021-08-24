@@ -42,10 +42,9 @@ int main(int argc, char *argv[])
     b = readCoefficient('b');
     c = readCoefficient('c');
 
-    int rootsCount = 0;
     float x1 = 0, x2 = 0;
 
-    rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
+    int rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
 
     outputAnswer(x1, x2, rootsCount);
 
@@ -83,9 +82,9 @@ void processCommandLineArguments(int argc, char *argv[])
 //------------------------------------------------------------------------------------------
 void testProgram()
 {
-    testIsLessZeroAndIsEqualZero(-1.0f,    true,  false);
-    testIsLessZeroAndIsEqualZero(-0.0011f, true,  false);
-    testIsLessZeroAndIsEqualZero(-0.001f,  false, true);
+    testIsLessZeroAndIsEqualZero(-1.0f,     true,  false);
+    testIsLessZeroAndIsEqualZero(-0.0011f,  true,  false);
+    testIsLessZeroAndIsEqualZero(-0.001f,   false, true);
     testIsLessZeroAndIsEqualZero( 0.0f,     false, true);
     testIsLessZeroAndIsEqualZero( 0.001f,   false, true);
     testIsLessZeroAndIsEqualZero( 0.0011f,  false, false);
