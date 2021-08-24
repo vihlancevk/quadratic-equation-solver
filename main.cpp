@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h >
+#include <string.h>
 #include <assert.h>
 #include <math.h>
 
@@ -24,9 +24,9 @@ void outputAnswer(float x1, float x2, int rootsCount);
 bool isLessZero(float number);
 bool isEqualZero(float number);
 void testIsLessZeroAndIsEqualZero(float number, bool correctIsLessZero, bool correctIsEqualZero);
-void solveLinearEquation(float a, float b, float *x, int *rootsCount);
+int solveLinearEquation(float a, float b, float *x);
 void testSolveLinearEquation(float a, float b, float correctX, int correctRootsCount);
-void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount);
+int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2);
 void testSolveQuadraticEquation(float a, float b, float c, float correctX1,
                                 float correctX2, int correctRootsCount);
 
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     int rootsCount = 0;
     float x1 = 0, x2 = 0;
 
-    solveQuadraticEquation(a, b, c, &x1, &x2, &rootsCount);
+    rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
 
     outputAnswer(x1, x2, rootsCount);
 
@@ -83,13 +83,13 @@ void processCommandLineArguments(int argc, char *argv[])
 //------------------------------------------------------------------------------------------
 void testProgram()
 {
-    testIsLessZeroAndIsEqualZero(-1.0f, true, false);
+    testIsLessZeroAndIsEqualZero(-1.0f   , true, false);
     testIsLessZeroAndIsEqualZero(-0.0011f, true, false);
-    testIsLessZeroAndIsEqualZero(-0.001f, false, true);
-    testIsLessZeroAndIsEqualZero(0.0f, false, true);
-    testIsLessZeroAndIsEqualZero(0.001f, false, true);
-    testIsLessZeroAndIsEqualZero(0.0011f, false, false);
-    testIsLessZeroAndIsEqualZero(1.0f, false, false);
+    testIsLessZeroAndIsEqualZero(-0.001f , false, true);
+    testIsLessZeroAndIsEqualZero(0.0f    , false, true);
+    testIsLessZeroAndIsEqualZero(0.001f  , false, true);
+    testIsLessZeroAndIsEqualZero(0.0011f , false, false);
+    testIsLessZeroAndIsEqualZero(1.0f    , false, false);
 
     testSolveLinearEquation(0, 0, 0, INF_ROOTS);
     testSolveLinearEquation(0, 1, 0, 0);
@@ -255,11 +255,11 @@ void testIsLessZeroAndIsEqualZero(float number, bool correctIsLessZero, bool cor
     bool returnIsLessZero = isLessZero(number);
     bool returnIsEqualZero = isEqualZero(number);
 
-    printf("[%s]isLessZero(%.4f) returned: %d, expected: %d",
+    printf("[%s]isLessZero(%.4f) returned: %d, expected: %d\n",
            returnIsLessZero == correctIsLessZero ? "correct" : "incorrect",
            number, returnIsLessZero, correctIsLessZero);
 
-    printf("[%s]isEqualZero(%.4f) returned: %d, expected: %d",
+    printf("[%s]isEqualZero(%.4f) returned: %d, expected: %d\n",
            returnIsEqualZero == correctIsEqualZero ? "correct" : "incorrect",
            number, returnIsEqualZero, correctIsEqualZero);
 }
@@ -270,34 +270,37 @@ void testIsLessZeroAndIsEqualZero(float number, bool correctIsLessZero, bool cor
 //! @param [in] a линейный коэффициент линейного уравнения.
 //! @param [in] b коэффициент линейного уравнения (свободный член).
 //! @param [out] x корень линейного уравнения.
-//! @param [out] rootsCount количество корней линейного уравнения.
+//!
+//! @return количество корней линейного уравнения.
 //------------------------------------------------------------------------------------------
-void solveLinearEquation(float a, float b, float *x, int *rootsCount)
+int solveLinearEquation(float a, float b, float *x)
 {
     assert(isfinite(a));
     assert(isfinite(b));
 
     assert(x != nullptr);
-    assert(rootsCount != nullptr);
+
+    int rootsCount = 0;
 
     if (!isEqualZero(a) && !isEqualZero(b))
     {
         *x = -b/a;
-        *rootsCount = 1;
+        rootsCount = 1;
     }
     else if (!isEqualZero(a) && isEqualZero(b))
     {
         *x = 0;
-        *rootsCount = 1;
+        rootsCount = 1;
     }
     else if (isEqualZero(a) && !isEqualZero(b))
     {
-        *rootsCount = 0;
+        rootsCount = 0;
     }
     else
     {
-        *rootsCount = INF_ROOTS;
+        rootsCount = INF_ROOTS;
     }
+    return rootsCount;
 }
 
 //------------------------------------------------------------------------------------------
@@ -321,9 +324,9 @@ void testSolveLinearEquation(float a, float b, float correctX, int correctRootsC
     float x = 0;
     int rootsCount = 0;
 
-    solveLinearEquation(a, b, &x, &rootsCount);
-    printf("[%s]solveLinearEquation(%.3f, %.3f, ptrOnX, ptrOnRootsCount) returned: "
-               "%.3f and %d, expected: %.3f and %d",
+    rootsCount = solveLinearEquation(a, b, &x);
+    printf("[%s]solveLinearEquation(%.3f, %.3f) returned: "
+               "%.3f and %d, expected: %.3f and %d\n",
                isEqualZero(x - correctX) && rootsCount == correctRootsCount ? "correct" : "incorrect",
                a, b, x, rootsCount, correctX, correctRootsCount);
 }
@@ -336,9 +339,10 @@ void testSolveLinearEquation(float a, float b, float correctX, int correctRootsC
 //! @param [in] c коэффициент квадратного уравнения (свободный член).
 //! @param [out] x1 корень квадратного уравнения.
 //! @param [out] x2 корень квадратного уравнения.
-//! @param [out] rootsCount количество корней квадратного уравнения.
+//!
+//! @return количество корней уравнения квадратного уравнения.
 //------------------------------------------------------------------------------------------
-void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount)
+int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2)
 {
     assert(isfinite(a));
     assert(isfinite(b));
@@ -346,7 +350,8 @@ void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int
 
     assert(x1 != nullptr);
     assert(x2 != nullptr);
-    assert(rootsCount != nullptr);
+
+    int rootsCount = 0;
 
     *x1 = 0;
     *x2 = 0;
@@ -358,25 +363,26 @@ void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int
 
         if (isLessZero(D))
         {
-            *rootsCount = 0;
+            rootsCount = 0;
         }
         else if (isEqualZero(D))
         {
             *x1 = -b*multiplier;
-            *rootsCount = 1;
+            rootsCount = 1;
         }
         else
         {
             float sqrtD = sqrtf(D);
             *x1 = (-b - sqrtD)*multiplier;
             *x2 = (-b + sqrtD)*multiplier;
-            *rootsCount = 2;
+            rootsCount = 2;
         }
     }
     else
     {
-        solveLinearEquation(b, c, x1, rootsCount);
+        rootsCount = solveLinearEquation(b, c, x1);
     }
+    return rootsCount;
 }
 
 //------------------------------------------------------------------------------------------
@@ -405,9 +411,9 @@ void testSolveQuadraticEquation(float a, float b, float c, float correctX1, floa
     float x2 = 0;
     int rootsCount = 0;
 
-    solveQuadraticEquation(a, b, c, &x1, &x2, &rootsCount);
-    printf("[%s]solveQuadraticEquation(%.3f, %.3f, %.3f, ptrOnX1, ptrOnX2, ptrOnRootsCount) returned: "
-               "%.3f, %.3f and %d, expected: %.3f, %.3f and %d",
+    rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
+    printf("[%s]solveQuadraticEquation(%.3f, %.3f, %.3f) returned: "
+               "%.3f, %.3f and %d, expected: %.3f, %.3f and %d\n",
                isEqualZero(x1 - correctX1) && isEqualZero(x2 - correctX2)&& rootsCount == correctRootsCount ? "correct" : "incorrect",
                a, b, c, x1, x2, rootsCount,
                correctX1, correctX2, correctRootsCount);
