@@ -54,10 +54,13 @@ int main(int argc, char *argv[])
 }
 
 //------------------------------------------------------------------------------------------
-//! @brief Обработка аргументов командной строки.
+//! @brief Функция обработки аргументов командной строки.
 //!
 //! @param [in] argc количество аргументов командной строки.
 //! @param [in] argv массив аргументов командной строки.
+//!
+//! @note в случае, если одним из элементов массива argv будет строка "--test"
+//!       или "-t", то будет вызвана функция testProgram.
 //------------------------------------------------------------------------------------------
 void processCommandLineArguments(int argc, char *argv[])
 {
@@ -72,7 +75,12 @@ void processCommandLineArguments(int argc, char *argv[])
 }
 
 //------------------------------------------------------------------------------------------
-//! @brief Тестирование программы на коректность работы.
+//! @brief Функция тестирование программы на коректность работы.
+//!
+//! @note  функция testProgram вызывает тестирующие функции: testIsLessZero,
+//!        testIsEqualZero, testSolveLinearEquation и testSolveQuadraticEquation,
+//!        которые в свою очередь проверят на корректность работы соответствующие им
+//!        функции: isLessZero, isEqualZero, solveLinearEquation и solveQuadraticEquation.
 //------------------------------------------------------------------------------------------
 void testProgram()
 {
@@ -167,6 +175,9 @@ float readCoefficient(char coefficientSymbol)
 //------------------------------------------------------------------------------------------
 void outputAnswer(float x1, float x2, int rootsCount)
 {
+    assert(isfinite(x1) != 0);
+    assert(isfinite(x2) != 0);
+
     switch (rootsCount)
     {
         case 0:
@@ -210,6 +221,8 @@ void outputAnswer(float x1, float x2, int rootsCount)
 //------------------------------------------------------------------------------------------
 bool isLessZero(float number)
 {
+    assert(isfinite(number) != 0);
+
     return number < 0 - PRECISION;
 }
 
@@ -251,6 +264,8 @@ void testIsLessZero(float number, bool rightAnswer)
 //------------------------------------------------------------------------------------------
 bool isEqualZero(float number)
 {
+    assert(isfinite(number) != 0);
+
     return number >= 0 - PRECISION && number <= 0 + PRECISION;
 }
 
@@ -288,6 +303,12 @@ void testIsEqualZero(float number, bool rightAnswer)
 //------------------------------------------------------------------------------------------
 void solveLinearEquation(float a, float b, float *x, int *rootsCount)
 {
+    assert(isfinite(a) != 0);
+    assert(isfinite(b) != 0);
+
+    assert(x != nullptr);
+    assert(rootsCount != nullptr);
+
     if (!isEqualZero(a) && !isEqualZero(b))
     {
         *x = -b/a;
@@ -310,34 +331,37 @@ void solveLinearEquation(float a, float b, float *x, int *rootsCount)
 
 //------------------------------------------------------------------------------------------
 //! @brief Тестирование функции solveLinearEquation,
-//!        решающей линеные уравнения вида a*x + b = 0, на корректность работы.
+//!        решающей линейные уравнения вида a*x + b = 0, на корректность работы.
 //!
 //! @param [in] a линейный коэффициент линейного уравнения.
 //! @param [in] b коэффициент линейного уравнения (свободный член).
-//! @param [in] rightAnswerX корень, который должна вернуть функция
+//! @param [in] correctX корень, который должна вернуть функция
 //!        solveLinearEquation при корректной работе, если в качестве аргументов
 //!        ей передать числа a и b.
-//! @param [in] rightAnswerRootsCount количество кореней, которые должна вернуть функция
+//! @param [in] correctRootsCount количество кореней, которые должна вернуть функция
 //!        solveLinearEquation при корректной работе, если в качестве аргументов
 //!        ей передать числа a и b.
 //!
 //! @note в случае коректной работы функции solveLinearEquation, в консоль будет выведенно
 //!       соответствующее сообщение.
 //------------------------------------------------------------------------------------------
-void testSolveLinearEquation(float a, float b, float rightAnswerX, int rightAnswerRootsCount)
+void testSolveLinearEquation(float a, float b, float correctX, int correctRootsCount)
 {
-    float returnAnswerX = 0;
-    int returnAnswerRootsCount = 0;
-    solveLinearEquation(a, b, &returnAnswerX, &returnAnswerRootsCount);
-    if (isEqualZero(returnAnswerX - rightAnswerX) && returnAnswerRootsCount == rightAnswerRootsCount)
+    float x = 0;
+    int rootsCount = 0;
+
+    solveLinearEquation(a, b, &x, &rootsCount);
+    if (isEqualZero(x - correctX) && rootsCount == correctRootsCount)
     {
-        printf("[correct] solveLinearEquation(%.3f, %.3f) returned: %.3f and %d, expected: %.3f and %d\n",
-               a, b, returnAnswerX, returnAnswerRootsCount, rightAnswerX, rightAnswerRootsCount);
+        printf("[correct] solveLinearEquation(%.3f, %.3f, ptrOnX, ptrOnRootsCount) returned: "
+               "%.3f and %d, expected: %.3f and %d\n",
+               a, b, x, rootsCount, correctX, correctRootsCount);
     }
     else
     {
-        printf("[incorrect] solveLinearEquation(%.3f, %.3f, 0, 0) returned: %.3f and %d, expected: %.3f and %d\n",
-               a, b, returnAnswerX, returnAnswerRootsCount, rightAnswerX, rightAnswerRootsCount);
+        printf("[incorrect] solveLinearEquation(%.3f, %.3f, ptrOnX, ptrOnRootsCount) returned: "
+               "%.3f and %d, expected: %.3f and %d\n",
+               a, b, x, rootsCount, correctX, correctRootsCount);
     }
 }
 
@@ -353,6 +377,10 @@ void testSolveLinearEquation(float a, float b, float rightAnswerX, int rightAnsw
 //------------------------------------------------------------------------------------------
 void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount)
 {
+    assert(isfinite(a) != 0);
+    assert(isfinite(b) != 0);
+    assert(isfinite(c) != 0);
+
     assert(x1 != nullptr);
     assert(x2 != nullptr);
     assert(rootsCount != nullptr);
@@ -395,38 +423,40 @@ void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int
 //! @param [in] a коэффициент квадратного уравнения (старший коэффициент).
 //! @param [in] b коэффициент квадратного уравнения (коэффициент при x).
 //! @param [in] c коэффициент квадратного уравнения (свободный член).
-//! @param [in] rightAnswerX1 первый корень, который должна вернуть функция
+//! @param [in] correctX1 первый корень, который должна вернуть функция
 //!        solveQuadraticEquation при корректной работе, если в качестве аргументов
 //!        ей передать числа a, b и c.
-//! @param [in] rightAnswerX2 второй корень, который должна вернуть функция
+//! @param [in] correctX2 второй корень, который должна вернуть функция
 //!        solveQuadraticEquation при корректной работе, если в качестве аргументов
 //!        ей передать числа a, b и c.
-//! @param [in] rightAnswerRootsCount количество кореней, которые должна вернуть функция
+//! @param [in] correctRootsCount количество кореней, которые должна вернуть функция
 //!        solveQuadraticEquation при корректной работе, если в качестве аргументов
 //!        ей передать числа a, b и c.
 //!
 //! @note в случае коректной работы функции solveQuadraticEquation, в консоль будет выведенно
 //!       соответствующее сообщение.
 //------------------------------------------------------------------------------------------
-void testSolveQuadraticEquation(float a, float b, float c, float rightAnswerX1, float rightAnswerX2, int rightAnswerRootsCount)
+void testSolveQuadraticEquation(float a, float b, float c, float correctX1, float correctX2, int correctRootsCount)
 {
-    float returnAnswerX1 = 0;
-    float returnAnswerX2 = 0;
-    int returnAnswerRootsCount = 0;
-    solveQuadraticEquation(a, b, c, &returnAnswerX1, &returnAnswerX2, &returnAnswerRootsCount);
-    if (isEqualZero(returnAnswerX1 - rightAnswerX1) && isEqualZero(returnAnswerX2 - rightAnswerX2)
-        && returnAnswerRootsCount == rightAnswerRootsCount)
+    float x1 = 0;
+    float x2 = 0;
+    int rootsCount = 0;
+
+    solveQuadraticEquation(a, b, c, &x1, &x2, &rootsCount);
+    if (isEqualZero(x1 - correctX1) && isEqualZero(x2 - correctX2) && rootsCount == correctRootsCount)
     {
-        printf("[correct] solveQuadraticEquation(%.3f, %.3f, %.3f, 0, 0, 0) returned: %.3f, %.3f and %d, "
+        printf("[correct] solveQuadraticEquation(%.3f, %.3f, %.3f, ptrOnX1, ptrOnX2, ptrOnRootsCount) returned: "
+               "%.3f, %.3f and %d, "
                "expected: %.3f, %.3f and %d\n",
-               a, b, c, returnAnswerX1, returnAnswerX2, returnAnswerRootsCount,
-               rightAnswerX1, rightAnswerX2, rightAnswerRootsCount);
+               a, b, c, x1, x2, rootsCount,
+               correctX1, correctX2, correctRootsCount);
     }
     else
     {
-        printf("[incorrect] solveQuadraticEquation(%.3f, %.3f, %.3f, 0, 0, 0) returned: %.3f, %.3f and %d, "
+        printf("[incorrect] solveQuadraticEquation(%.3f, %.3f, %.3f, ptrOnX1, ptrOnX2, ptrOnRootsCount) returned: "
+               "%.3f, %.3f and %d, "
                "expected: %.3f, %.3f and %d\n",
-               a, b, c, returnAnswerX1, returnAnswerX2, returnAnswerRootsCount,
-               rightAnswerX1, rightAnswerX2, rightAnswerRootsCount);
+               a, b, c, x1, x2, rootsCount,
+               correctX1, correctX2, correctRootsCount);
     }
 }
