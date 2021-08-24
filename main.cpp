@@ -300,6 +300,7 @@ int solveLinearEquation(float a, float b, float *x)
     {
         rootsCount = INF_ROOTS;
     }
+
     return rootsCount;
 }
 
@@ -326,9 +327,9 @@ void testSolveLinearEquation(float a, float b, float correctX, int correctRootsC
 
     rootsCount = solveLinearEquation(a, b, &x);
     printf("[%s]solveLinearEquation(%.3f, %.3f) returned: "
-               "%.3f and %d, expected: %.3f and %d\n",
-               isEqualZero(x - correctX) && rootsCount == correctRootsCount ? "correct" : "incorrect",
-               a, b, x, rootsCount, correctX, correctRootsCount);
+            "%.3f and %d, expected: %.3f and %d\n",
+            isEqualZero(x - correctX) && rootsCount == correctRootsCount ? "correct" : "incorrect",
+            a, b, x, rootsCount, correctX, correctRootsCount);
 }
 
 //------------------------------------------------------------------------------------------
@@ -350,6 +351,7 @@ int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2)
 
     assert(x1 != nullptr);
     assert(x2 != nullptr);
+    assert((x1 - x2) != 0);
 
     int rootsCount = 0;
 
@@ -382,6 +384,7 @@ int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2)
     {
         rootsCount = solveLinearEquation(b, c, x1);
     }
+
     return rootsCount;
 }
 
@@ -413,8 +416,8 @@ void testSolveQuadraticEquation(float a, float b, float c, float correctX1, floa
 
     rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
     printf("[%s]solveQuadraticEquation(%.3f, %.3f, %.3f) returned: "
-               "%.3f, %.3f and %d, expected: %.3f, %.3f and %d\n",
-               isEqualZero(x1 - correctX1) && isEqualZero(x2 - correctX2)&& rootsCount == correctRootsCount ? "correct" : "incorrect",
-               a, b, c, x1, x2, rootsCount,
-               correctX1, correctX2, correctRootsCount);
+            "%.3f, %.3f and %d, expected: %.3f, %.3f and %d\n",
+            isEqualZero(x1 - correctX1) && isEqualZero(x2 - correctX2)&& rootsCount == correctRootsCount ? "correct" : "incorrect",
+            a, b, c, x1, x2, rootsCount,
+            correctX1, correctX2, correctRootsCount);
 }
