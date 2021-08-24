@@ -1,8 +1,8 @@
-# Документация
-https://vihlancevk.github.io/quadratic-equation-solver/main_8cpp.html
-
-## quadratic-equation-solver
+# quadratic-equation-solver
 Простой калькулятор для решения квадратного уравнения.
+
+## Документация
+https://vihlancevk.github.io/quadratic-equation-solver/main_8cpp.html
 
 [![Screen.png](https://i.postimg.cc/L4xm0DP8/Screen.png)](https://postimg.cc/xqbrXKgw)
 
