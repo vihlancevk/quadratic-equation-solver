@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <math.h>
 #include"userInteraction.h"
-#include"equationSolution.h"
+#include"equationSolving.h"
 
 //------------------------------------------------------------------------------------------
 //! @brief Очистка ввода с консоли.
