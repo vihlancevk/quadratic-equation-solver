@@ -23,12 +23,12 @@ float readCoefficient(char coefficientSymbol);
 void outputAnswer(float x1, float x2, int rootsCount);
 bool isLessZero(float number);
 bool isEqualZero(float number);
-void testIsLessZeroAndIsEqualZero(float number, bool rightAnswerIsLessZero, bool rightAnswerIsEqualZero);
+void testIsLessZeroAndIsEqualZero(float number, bool correctIsLessZero, bool correctIsEqualZero);
 void solveLinearEquation(float a, float b, float *x, int *rootsCount);
-void testSolveLinearEquation(float a, float b, float rightAnswerX, int rightAnswerRootsCount);
+void testSolveLinearEquation(float a, float b, float correctX, int correctRootsCount);
 void solveQuadraticEquation(float a, float b, float c, float *x1, float *x2, int *rootsCount);
-void testSolveQuadraticEquation(float a, float b, float c, float rightAnswerX1,
-                                float rightAnswerX2, int rightAnswerRootsCount);
+void testSolveQuadraticEquation(float a, float b, float c, float correctX1,
+                                float correctX2, int correctRootsCount);
 
 int main(int argc, char *argv[])
 {
@@ -240,40 +240,28 @@ bool isEqualZero(float number)
 //! @brief Тестирование функций isLessZero и isEqualZero на корректность работы.
 //!
 //! @param [in] number число, которое нужно сравнить с нулём.
-//! @param [in] rightAnswerIsLessZero ответ, который должна вернуть функция
+//! @param [in] correctIsLessZero ответ, который должна вернуть функция
 //!             isLessZero при корректной работе, если в качестве аргумента
 //!             ей передать число number.
-//! @param [in] rightAnswerIsEqualZero ответ, который должна вернуть функция
+//! @param [in] correctIsEqualZero ответ, который должна вернуть функция
 //!             isLessZero при корректной работе, если в качестве аргумента
 //!             ей передать число number.
 //!
 //! @note в случае коректной работы функций isLessZero и isEqualZero, в консоль будет выведенно
 //!       соответствующее сообщение.
 //------------------------------------------------------------------------------------------
-void testIsLessZeroAndIsEqualZero(float number, bool rightAnswerIsLessZero, bool rightAnswerIsEqualZero)
+void testIsLessZeroAndIsEqualZero(float number, bool correctIsLessZero, bool correctIsEqualZero)
 {
-    bool returnAnswerIsLessZero = isLessZero(number);
-    bool returnAnswerIsEqualZero = isEqualZero(number);
+    bool returnIsLessZero = isLessZero(number);
+    bool returnIsEqualZero = isEqualZero(number);
 
-    printf("isLessZero(%.4f) returned: %d, expected: %d", number, returnAnswerIsLessZero, rightAnswerIsLessZero);
-    if (returnAnswerIsLessZero == rightAnswerIsLessZero)
-    {
-        printf(" - [correct]\n");
-    }
-    else
-    {
-        printf(" - [incorrect]\n");
-    }
+    printf("[%s]isLessZero(%.4f) returned: %d, expected: %d",
+           returnIsLessZero == correctIsLessZero ? "correct" : "incorrect",
+           number, returnIsLessZero, correctIsLessZero);
 
-    printf("isEqualZero(%.4f) returned: %d, expected: %d", number, returnAnswerIsEqualZero, rightAnswerIsEqualZero);
-    if (returnAnswerIsEqualZero == rightAnswerIsEqualZero)
-    {
-        printf(" - [correct]\n");
-    }
-    else
-    {
-        printf(" - [incorrect]\n");
-    }
+    printf("[%s]isEqualZero(%.4f) returned: %d, expected: %d",
+           returnIsEqualZero == correctIsEqualZero ? "correct" : "incorrect",
+           number, returnIsEqualZero, correctIsEqualZero);
 }
 
 //------------------------------------------------------------------------------------------
@@ -334,17 +322,10 @@ void testSolveLinearEquation(float a, float b, float correctX, int correctRootsC
     int rootsCount = 0;
 
     solveLinearEquation(a, b, &x, &rootsCount);
-    printf("solveLinearEquation(%.3f, %.3f, ptrOnX, ptrOnRootsCount) returned: "
+    printf("[%s]solveLinearEquation(%.3f, %.3f, ptrOnX, ptrOnRootsCount) returned: "
                "%.3f and %d, expected: %.3f and %d",
+               isEqualZero(x - correctX) && rootsCount == correctRootsCount ? "correct" : "incorrect",
                a, b, x, rootsCount, correctX, correctRootsCount);
-    if (isEqualZero(x - correctX) && rootsCount == correctRootsCount)
-    {
-        printf(" - [correct]/n");
-    }
-    else
-    {
-        printf(" - [incorrect]/n");
-    }
 }
 
 //------------------------------------------------------------------------------------------
@@ -425,17 +406,9 @@ void testSolveQuadraticEquation(float a, float b, float c, float correctX1, floa
     int rootsCount = 0;
 
     solveQuadraticEquation(a, b, c, &x1, &x2, &rootsCount);
-    printf("solveQuadraticEquation(%.3f, %.3f, %.3f, ptrOnX1, ptrOnX2, ptrOnRootsCount) returned: "
-               "%.3f, %.3f and %d, "
-               "expected: %.3f, %.3f and %d",
+    printf("[%s]solveQuadraticEquation(%.3f, %.3f, %.3f, ptrOnX1, ptrOnX2, ptrOnRootsCount) returned: "
+               "%.3f, %.3f and %d, expected: %.3f, %.3f and %d",
+               isEqualZero(x1 - correctX1) && isEqualZero(x2 - correctX2)&& rootsCount == correctRootsCount ? "correct" : "incorrect",
                a, b, c, x1, x2, rootsCount,
                correctX1, correctX2, correctRootsCount);
-    if (isEqualZero(x1 - correctX1) && isEqualZero(x2 - correctX2) && rootsCount == correctRootsCount)
-    {
-        printf(" - [correct]");
-    }
-    else
-    {
-        printf(" - [incorrect]");
-    }
 }
