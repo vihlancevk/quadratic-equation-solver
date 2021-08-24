@@ -83,21 +83,21 @@ void processCommandLineArguments(int argc, char *argv[])
 //------------------------------------------------------------------------------------------
 void testProgram()
 {
-    testIsLessZeroAndIsEqualZero(-1.0f   , true, false);
-    testIsLessZeroAndIsEqualZero(-0.0011f, true, false);
-    testIsLessZeroAndIsEqualZero(-0.001f , false, true);
-    testIsLessZeroAndIsEqualZero(0.0f    , false, true);
-    testIsLessZeroAndIsEqualZero(0.001f  , false, true);
-    testIsLessZeroAndIsEqualZero(0.0011f , false, false);
-    testIsLessZeroAndIsEqualZero(1.0f    , false, false);
+    testIsLessZeroAndIsEqualZero(-1.0f,    true,  false);
+    testIsLessZeroAndIsEqualZero(-0.0011f, true,  false);
+    testIsLessZeroAndIsEqualZero(-0.001f,  false, true);
+    testIsLessZeroAndIsEqualZero(0.0f,     false, true);
+    testIsLessZeroAndIsEqualZero(0.001f,   false, true);
+    testIsLessZeroAndIsEqualZero(0.0011f,  false, false);
+    testIsLessZeroAndIsEqualZero(1.0f,     false, false);
 
-    testSolveLinearEquation(0, 0, 0, INF_ROOTS);
-    testSolveLinearEquation(0, 1, 0, 0);
+    testSolveLinearEquation(0, 0,  0, INF_ROOTS);
+    testSolveLinearEquation(0, 1,  0, 0);
     testSolveLinearEquation(1, 1, -1, 1);
 
-    testSolveQuadraticEquation(1, 1, 1, 0, 0, 0);
-    testSolveQuadraticEquation(0, 0, 0, 0, 0, INF_ROOTS);
-    testSolveQuadraticEquation(1, 2, 1, -1, 0, 1);
+    testSolveQuadraticEquation(1, 1,  1,  0, 0, 0);
+    testSolveQuadraticEquation(0, 0,  0,  0, 0, INF_ROOTS);
+    testSolveQuadraticEquation(1, 2,  1, -1, 0, 1);
     testSolveQuadraticEquation(1, 5, -6, -6, 1, 2);
 }
 
@@ -327,9 +327,9 @@ void testSolveLinearEquation(float a, float b, float correctX, int correctRootsC
 
     rootsCount = solveLinearEquation(a, b, &x);
     printf("[%s]solveLinearEquation(%.3f, %.3f) returned: "
-            "%.3f and %d, expected: %.3f and %d\n",
-            isEqualZero(x - correctX) && rootsCount == correctRootsCount ? "correct" : "incorrect",
-            a, b, x, rootsCount, correctX, correctRootsCount);
+           "%.3f and %d, expected: %.3f and %d\n",
+           isEqualZero(x - correctX) && rootsCount == correctRootsCount ? "correct" : "incorrect",
+           a, b, x, rootsCount, correctX, correctRootsCount);
 }
 
 //------------------------------------------------------------------------------------------
@@ -416,8 +416,8 @@ void testSolveQuadraticEquation(float a, float b, float c, float correctX1, floa
 
     rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
     printf("[%s]solveQuadraticEquation(%.3f, %.3f, %.3f) returned: "
-            "%.3f, %.3f and %d, expected: %.3f, %.3f and %d\n",
-            isEqualZero(x1 - correctX1) && isEqualZero(x2 - correctX2)&& rootsCount == correctRootsCount ? "correct" : "incorrect",
-            a, b, c, x1, x2, rootsCount,
-            correctX1, correctX2, correctRootsCount);
+           "%.3f, %.3f and %d, expected: %.3f, %.3f and %d\n",
+           isEqualZero(x1 - correctX1) && isEqualZero(x2 - correctX2)&& rootsCount == correctRootsCount ? "correct" : "incorrect",
+           a, b, c, x1, x2, rootsCount,
+           correctX1, correctX2, correctRootsCount);
 }
