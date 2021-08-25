@@ -1,88 +1,10 @@
 #include <assert.h>
 #include <math.h>
-#include"equationSolving.h"
+#include "equationSolving.h"
 
 const float PRECISION = 0.001f;
 
-//------------------------------------------------------------------------------------------
-//! @brief Сравнения числа с нулём.
-//!
-//! @param [in] number число, которое нужно сравнить с нулём.
-//!
-//! @note сравнение числа происходит при помощи константы PRECISION = 0.001f,
-//!       таким образом, если число попадает в интервал от минус бесконечности
-//!       до 0 - PRECISION,
-//!       то оно меньше нуля.
-//!
-//! @return меньше ли нуля число.
-//------------------------------------------------------------------------------------------
-bool isLessZero(float number)
-{
-    assert(isfinite(number));
-
-    return number < 0 - PRECISION;
-}
-
-//------------------------------------------------------------------------------------------
-//! @brief Сравнения числа с нулём.
-//!
-//! @param [in] number число, которое нужно сравнить с нулём.
-//!
-//! @note сравнение числа происходит при помощи константы PRECISION = 0.001f,
-//!       таким образом, если число попадает в интервал от 0 - PRECISION
-//!       до 0 + PRECISION,
-//!       то оно равно нулю.
-//!
-//! @return является ли число нулём.
-//------------------------------------------------------------------------------------------
-bool isEqualZero(float number)
-{
-    assert(isfinite(number));
-
-    return number >= 0 - PRECISION && number <= 0 + PRECISION;
-}
-
-//------------------------------------------------------------------------------------------
-//! @brief Вычисление корней линейного уравнения вида ax + b = 0.
-//!
-//! @param [in] a линейный коэффициент линейного уравнения.
-//! @param [in] b коэффициент линейного уравнения (свободный член).
-//! @param [out] x корень линейного уравнения.
-//!
-//! @return количество корней линейного уравнения.
-//------------------------------------------------------------------------------------------
-int solveLinearEquation(float a, float b, float *x)
-{
-    assert(isfinite(a));
-    assert(isfinite(b));
-
-    assert(x != nullptr);
-
-    int rootsCount = 0;
-
-    if (!isEqualZero(a) && !isEqualZero(b))
-    {
-        *x = -b/a;
-        rootsCount = 1;
-    }
-    else if (!isEqualZero(a) && isEqualZero(b))
-    {
-        *x = 0;
-        rootsCount = 1;
-    }
-    else if (isEqualZero(a) && !isEqualZero(b))
-    {
-        rootsCount = 0;
-    }
-    else
-    {
-        rootsCount = INF_ROOTS;
-    }
-
-    return rootsCount;
-}
-
-//------------------------------------------------------------------------------------------
+//===========================================================================================
 //! @brief Вычисление корней квадратного уравнения.
 //!
 //! @param [in] a коэффициент квадратного уравнения (старший коэффициент).
@@ -91,8 +13,12 @@ int solveLinearEquation(float a, float b, float *x)
 //! @param [out] x1 корень квадратного уравнения.
 //! @param [out] x2 корень квадратного уравнения.
 //!
-//! @return количество корней уравнения квадратного уравнения.
+//! @note Корни квадратного уравнения зануляются при работе функции,
+//!       даже если их нет.
+//!
+//! @return Количество корней уравнения квадратного уравнения.
 //------------------------------------------------------------------------------------------
+
 int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2)
 {
     assert(isfinite(a));
@@ -108,32 +34,110 @@ int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2)
     *x1 = 0;
     *x2 = 0;
 
-    if (!isEqualZero(a))
-    {
-        float D = b*b - 4*a*c;
-        float multiplier = 1/(a*2);
+    if (compareZero(a) == 0)
+        return solveLinearEquation(b, c, x1);
 
-        if (isLessZero(D))
+    if(compareZero(c) == 0)
+    {
+        rootsCount = solveLinearEquation(a, b, x1);
+        *x2 = 0;
+        if(rootsCount == INF_ROOTS)
         {
-            rootsCount = 0;
-        }
-        else if (isEqualZero(D))
-        {
-            *x1 = -b*multiplier;
-            rootsCount = 1;
+            return rootsCount;
         }
         else
         {
-            float sqrtD = sqrtf(D);
-            *x1 = (-b - sqrtD)*multiplier;
-            *x2 = (-b + sqrtD)*multiplier;
-            rootsCount = 2;
+            return (rootsCount + 1);
         }
+    }
+
+    float D = b*b - 4*a*c;
+    float multiplier = 1/(a*2);
+
+    if (compareZero(D) == -1)
+    {
+        rootsCount = 0;
+    }
+    else if (compareZero(D) == 0)
+    {
+        *x1 = -b*multiplier;
+        rootsCount = 1;
     }
     else
     {
-        rootsCount = solveLinearEquation(b, c, x1);
+        float sqrtD = sqrtf(D);
+        *x1 = (-b - sqrtD)*multiplier;
+        *x2 = (-b + sqrtD)*multiplier;
+        rootsCount = 2;
     }
 
     return rootsCount;
+}
+
+//===========================================================================================
+//! @brief Вычисление корней линейного уравнения вида ax + b = 0.
+//!
+//! @param [in] a линейный коэффициент линейного уравнения.
+//! @param [in] b коэффициент линейного уравнения (свободный член).
+//! @param [out] x корень линейного уравнения.
+//!
+//! @return Количество корней линейного уравнения.
+//------------------------------------------------------------------------------------------
+
+int solveLinearEquation(float a, float b, float *x)
+{
+    assert(isfinite(a));
+    assert(isfinite(b));
+
+    assert(x != nullptr);
+
+    int rootsCount = 0;
+
+    if (compareZero(a) != 0 && compareZero(b) != 0)
+    {
+        *x = -b/a;
+        rootsCount = 1;
+    }
+    else if (compareZero(a) != 0 && compareZero(b) == 0)
+    {
+        *x = 0;
+        rootsCount = 1;
+    }
+    else if (compareZero(a) == 0 && compareZero(b) != 0)
+    {
+        rootsCount = 0;
+    }
+    else
+    {
+        rootsCount = INF_ROOTS;
+    }
+
+    return rootsCount;
+}
+
+//==========================================================================================
+//! @brief Сравнения числа с нулём.
+//!
+//! @param [in] number число, которое нужно сравнить с нулём.
+//!
+//! @return Функция возвращает:
+//!         1)  1, если число number больше нуля;
+//!         2)  0, если число number равно нулю;
+//!         3) -1, если число number меньше нуля.
+//------------------------------------------------------------------------------------------
+
+int compareZero(float number)
+{
+    if (number > 0 + PRECISION)
+    {
+        return 1;
+    }
+    else if (0 - PRECISION <= number && number <= 0 + PRECISION)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
 }

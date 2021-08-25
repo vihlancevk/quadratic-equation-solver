@@ -1,109 +1,102 @@
 #include <stdio.h>
 #include <string.h>
-#include"testProgram.h"
-#include"userInteraction.h"
-#include"equationSolving.h"
+#include "testProgram.h"
+#include "userInteraction.h"
+#include "equationSolving.h"
 
-//------------------------------------------------------------------------------------------
-//! @brief РўРµСЃС‚РёСЂРѕРІР°РЅРёРµ С„СѓРЅРєС†РёР№ isLessZero Рё isEqualZero РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ СЂР°Р±РѕС‚С‹.
+//==========================================================================================
+//! @brief Тестирование функции compareZero на корректность работы.
 //!
-//! @param [in] number С‡РёСЃР»Рѕ, РєРѕС‚РѕСЂРѕРµ РЅСѓР¶РЅРѕ СЃСЂР°РІРЅРёС‚СЊ СЃ РЅСѓР»С‘Рј.
-//! @param [in] correctIsLessZero РѕС‚РІРµС‚, РєРѕС‚РѕСЂС‹Р№ РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊ С„СѓРЅРєС†РёСЏ
-//!             isLessZero РїСЂРё РєРѕСЂСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚Рµ, РµСЃР»Рё РІ РєР°С‡РµСЃС‚РІРµ Р°СЂРіСѓРјРµРЅС‚Р°
-//!             РµР№ РїРµСЂРµРґР°С‚СЊ С‡РёСЃР»Рѕ number.
-//! @param [in] correctIsEqualZero РѕС‚РІРµС‚, РєРѕС‚РѕСЂС‹Р№ РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊ С„СѓРЅРєС†РёСЏ
-//!             isLessZero РїСЂРё РєРѕСЂСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚Рµ, РµСЃР»Рё РІ РєР°С‡РµСЃС‚РІРµ Р°СЂРіСѓРјРµРЅС‚Р°
-//!             РµР№ РїРµСЂРµРґР°С‚СЊ С‡РёСЃР»Рѕ number.
+//! @param [in] number число, которое нужно сравнить с нулём.
+//! @param [in] correctAnswer ответ, который должна вернуть функция
+//!             campareZero при корректной работе, если в качестве аргумента
+//!             ей передать число number
 //!
-//! @note РІ СЃР»СѓС‡Р°Рµ РєРѕСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚С‹ С„СѓРЅРєС†РёР№ isLessZero Рё isEqualZero, РІ РєРѕРЅСЃРѕР»СЊ Р±СѓРґРµС‚ РІС‹РІРµРґРµРЅРЅРѕ
-//!       СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРµ СЃРѕРѕР±С‰РµРЅРёРµ.
+//! @note В случае коректной работы функции compareZero, в консоль будет выведенно
+//!       соответствующее сообщение.
 //------------------------------------------------------------------------------------------
-void testIsLessZeroAndIsEqualZero(float number, bool correctIsLessZero, bool correctIsEqualZero)
+
+void testCompareZero(float number, int correctAnswer)
 {
-    bool returnIsLessZero = isLessZero(number);
-    bool returnIsEqualZero = isEqualZero(number);
+    int returnAnswer = compareZero(number);
 
-    printf("[%s]isLessZero(%.4f) returned: %d, expected: %d\n",
-           returnIsLessZero == correctIsLessZero ? "correct" : "incorrect",
-           number, returnIsLessZero, correctIsLessZero);
-
-    printf("[%s]isEqualZero(%.4f) returned: %d, expected: %d\n",
-           returnIsEqualZero == correctIsEqualZero ? "correct" : "incorrect",
-           number, returnIsEqualZero, correctIsEqualZero);
+    printf("[%s]compareZero(%.4f) returned: %d, expected: %d\n",
+           (returnAnswer == correctAnswer) ? "correct" : "incorrect",
+           number, returnAnswer, correctAnswer);
 }
 
-//------------------------------------------------------------------------------------------
-//! @brief РўРµСЃС‚РёСЂРѕРІР°РЅРёРµ С„СѓРЅРєС†РёРё solveLinearEquation,
-//!        СЂРµС€Р°СЋС‰РµР№ Р»РёРЅРµР№РЅС‹Рµ СѓСЂР°РІРЅРµРЅРёСЏ РІРёРґР° a*x + b = 0, РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ СЂР°Р±РѕС‚С‹.
+//==========================================================================================
+//! @brief Тестирование функции solveLinearEquation,
+//!        решающей линейные уравнения вида a*x + b = 0, на корректность работы.
 //!
-//! @param [in] a Р»РёРЅРµР№РЅС‹Р№ РєРѕСЌС„С„РёС†РёРµРЅС‚ Р»РёРЅРµР№РЅРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ.
-//! @param [in] b РєРѕСЌС„С„РёС†РёРµРЅС‚ Р»РёРЅРµР№РЅРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ (СЃРІРѕР±РѕРґРЅС‹Р№ С‡Р»РµРЅ).
-//! @param [in] correctX РєРѕСЂРµРЅСЊ, РєРѕС‚РѕСЂС‹Р№ РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊ С„СѓРЅРєС†РёСЏ
-//!        solveLinearEquation РїСЂРё РєРѕСЂСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚Рµ, РµСЃР»Рё РІ РєР°С‡РµСЃС‚РІРµ Р°СЂРіСѓРјРµРЅС‚РѕРІ
-//!        РµР№ РїРµСЂРµРґР°С‚СЊ С‡РёСЃР»Р° a Рё b.
-//! @param [in] correctRootsCount РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕСЂРµРЅРµР№, РєРѕС‚РѕСЂС‹Рµ РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊ С„СѓРЅРєС†РёСЏ
-//!        solveLinearEquation РїСЂРё РєРѕСЂСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚Рµ, РµСЃР»Рё РІ РєР°С‡РµСЃС‚РІРµ Р°СЂРіСѓРјРµРЅС‚РѕРІ
-//!        РµР№ РїРµСЂРµРґР°С‚СЊ С‡РёСЃР»Р° a Рё b.
+//! @param [in] a линейный коэффициент линейного уравнения.
+//! @param [in] b коэффициент линейного уравнения (свободный член).
+//! @param [in] correctX корень, который должна вернуть функция
+//!        solveLinearEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a и b.
+//! @param [in] correctRootsCount количество кореней, которые должна вернуть функция
+//!        solveLinearEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a и b.
 //!
-//! @note РІ СЃР»СѓС‡Р°Рµ РєРѕСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚С‹ С„СѓРЅРєС†РёРё solveLinearEquation, РІ РєРѕРЅСЃРѕР»СЊ Р±СѓРґРµС‚ РІС‹РІРµРґРµРЅРЅРѕ
-//!       СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРµ СЃРѕРѕР±С‰РµРЅРёРµ.
+//! @note В случае коректной работы функции solveLinearEquation, в консоль будет выведенно
+//!       соответствующее сообщение.
 //------------------------------------------------------------------------------------------
+
 void testSolveLinearEquation(float a, float b, float correctX, int correctRootsCount)
 {
     float x = 0;
-    int rootsCount = 0;
+    int rootsCount = solveLinearEquation(a, b, &x);
 
-    rootsCount = solveLinearEquation(a, b, &x);
     printf("[%s]solveLinearEquation(%.3f, %.3f) returned: "
            "%.3f and %d, expected: %.3f and %d\n",
-           isEqualZero(x - correctX) && rootsCount == correctRootsCount ? "correct" : "incorrect",
+           (compareZero(x - correctX) == 0 && rootsCount == correctRootsCount) ? "correct" : "incorrect",
            a, b, x, rootsCount, correctX, correctRootsCount);
 }
 
-//------------------------------------------------------------------------------------------
-//! @brief РўРµСЃС‚РёСЂРѕРІР°РЅРёРµ С„СѓРЅРєС†РёРё solveQuadraticEquation,
-//!        СЂРµС€Р°СЋС‰РµР№ РєРІР°РґСЂР°С‚РЅС‹Рµ СѓСЂР°РІРЅРµРЅРёСЏ РІРёРґР° a*x^2 + b*x + c = 0, РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ СЂР°Р±РѕС‚С‹.
+//==========================================================================================
+//! @brief Тестирование функции solveQuadraticEquation,
+//!        решающей квадратные уравнения вида a*x^2 + b*x + c = 0, на корректность работы.
 //!
-//! @param [in] a РєРѕСЌС„С„РёС†РёРµРЅС‚ РєРІР°РґСЂР°С‚РЅРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ (СЃС‚Р°СЂС€РёР№ РєРѕСЌС„С„РёС†РёРµРЅС‚).
-//! @param [in] b РєРѕСЌС„С„РёС†РёРµРЅС‚ РєРІР°РґСЂР°С‚РЅРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ (РєРѕСЌС„С„РёС†РёРµРЅС‚ РїСЂРё x).
-//! @param [in] c РєРѕСЌС„С„РёС†РёРµРЅС‚ РєРІР°РґСЂР°С‚РЅРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ (СЃРІРѕР±РѕРґРЅС‹Р№ С‡Р»РµРЅ).
-//! @param [in] correctX1 РїРµСЂРІС‹Р№ РєРѕСЂРµРЅСЊ, РєРѕС‚РѕСЂС‹Р№ РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊ С„СѓРЅРєС†РёСЏ
-//!        solveQuadraticEquation РїСЂРё РєРѕСЂСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚Рµ, РµСЃР»Рё РІ РєР°С‡РµСЃС‚РІРµ Р°СЂРіСѓРјРµРЅС‚РѕРІ
-//!        РµР№ РїРµСЂРµРґР°С‚СЊ С‡РёСЃР»Р° a, b Рё c.
-//! @param [in] correctX2 РІС‚РѕСЂРѕР№ РєРѕСЂРµРЅСЊ, РєРѕС‚РѕСЂС‹Р№ РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊ С„СѓРЅРєС†РёСЏ
-//!        solveQuadraticEquation РїСЂРё РєРѕСЂСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚Рµ, РµСЃР»Рё РІ РєР°С‡РµСЃС‚РІРµ Р°СЂРіСѓРјРµРЅС‚РѕРІ
-//!        РµР№ РїРµСЂРµРґР°С‚СЊ С‡РёСЃР»Р° a, b Рё c.
-//! @param [in] correctRootsCount РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕСЂРµРЅРµР№, РєРѕС‚РѕСЂС‹Рµ РґРѕР»Р¶РЅР° РІРµСЂРЅСѓС‚СЊ С„СѓРЅРєС†РёСЏ
-//!        solveQuadraticEquation РїСЂРё РєРѕСЂСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚Рµ, РµСЃР»Рё РІ РєР°С‡РµСЃС‚РІРµ Р°СЂРіСѓРјРµРЅС‚РѕРІ
-//!        РµР№ РїРµСЂРµРґР°С‚СЊ С‡РёСЃР»Р° a, b Рё c.
+//! @param [in] a коэффициент квадратного уравнения (старший коэффициент).
+//! @param [in] b коэффициент квадратного уравнения (коэффициент при x).
+//! @param [in] c коэффициент квадратного уравнения (свободный член).
+//! @param [in] correctX1 первый корень, который должна вернуть функция
+//!        solveQuadraticEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a, b и c.
+//! @param [in] correctX2 второй корень, который должна вернуть функция
+//!        solveQuadraticEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a, b и c.
+//! @param [in] correctRootsCount количество кореней, которые должна вернуть функция
+//!        solveQuadraticEquation при корректной работе, если в качестве аргументов
+//!        ей передать числа a, b и c.
 //!
-//! @note РІ СЃР»СѓС‡Р°Рµ РєРѕСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚С‹ С„СѓРЅРєС†РёРё solveQuadraticEquation, РІ РєРѕРЅСЃРѕР»СЊ Р±СѓРґРµС‚ РІС‹РІРµРґРµРЅРЅРѕ
-//!       СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРµ СЃРѕРѕР±С‰РµРЅРёРµ.
+//! @note В случае коректной работы функции solveQuadraticEquation, в консоль будет выведенно
+//!       соответствующее сообщение.
 //------------------------------------------------------------------------------------------
+
 void testSolveQuadraticEquation(float a, float b, float c, float correctX1, float correctX2, int correctRootsCount)
 {
-    float x1 = 0;
-    float x2 = 0;
-    int rootsCount = 0;
+    float x1 = 0, x2 = 0;
+    int rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
 
-    rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
     printf("[%s]solveQuadraticEquation(%.3f, %.3f, %.3f) returned: "
            "%.3f, %.3f and %d, expected: %.3f, %.3f and %d\n",
-           isEqualZero(x1 - correctX1) && isEqualZero(x2 - correctX2)&& rootsCount == correctRootsCount ? "correct" : "incorrect",
+           (compareZero(x1 - correctX1) == 0 && compareZero(x2 - correctX2) == 0 && rootsCount == correctRootsCount) ? "correct" : "incorrect",
            a, b, c, x1, x2, rootsCount,
            correctX1, correctX2, correctRootsCount);
 }
 
-//------------------------------------------------------------------------------------------
-//! @brief Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°Р±РѕС‚РєРё Р°СЂРіСѓРјРµРЅС‚РѕРІ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё.
+//==========================================================================================
+//! @brief Функция обработки аргументов командной строки.
 //!
-//! @param [in] argc РєРѕР»РёС‡РµСЃС‚РІРѕ Р°СЂРіСѓРјРµРЅС‚РѕРІ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё.
-//! @param [in] argv РјР°СЃСЃРёРІ Р°СЂРіСѓРјРµРЅС‚РѕРІ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё.
+//! @param [in] argc количество аргументов командной строки.
+//! @param [in] argv массив аргументов командной строки.
 //!
-//! @note РІ СЃР»СѓС‡Р°Рµ, РµСЃР»Рё РѕРґРЅРёРј РёР· СЌР»РµРјРµРЅС‚РѕРІ РјР°СЃСЃРёРІР° argv Р±СѓРґРµС‚ СЃС‚СЂРѕРєР° "--test"
-//!       РёР»Рё "-t", С‚Рѕ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅР° С„СѓРЅРєС†РёСЏ testProgram.
+//! @note В случае, если одним из элементов массива argv будет строка "--test"
+//!       или "-t", то будет вызвана функция testProgram.
 //------------------------------------------------------------------------------------------
-void processCommandLineArguments(int argc, char *argv[])
+
+void processCommandLineArguments(const int argc, const char *argv[])
 {
     for (int i = 0; i < argc; i += 1)
     {
@@ -115,23 +108,24 @@ void processCommandLineArguments(int argc, char *argv[])
     }
 }
 
-//------------------------------------------------------------------------------------------
-//! @brief Р¤СѓРЅРєС†РёСЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ РїСЂРѕРіСЂР°РјРјС‹ РЅР° РєРѕСЂРµРєС‚РЅРѕСЃС‚СЊ СЂР°Р±РѕС‚С‹.
+//==========================================================================================
+//! @brief Функция тестирование программы на коректность работы.
 //!
-//! @note  С„СѓРЅРєС†РёСЏ testProgram РІС‹Р·С‹РІР°РµС‚ С‚РµСЃС‚РёСЂСѓСЋС‰РёРµ С„СѓРЅРєС†РёРё: testIsLessZero,
-//!        testIsEqualZero, testSolveLinearEquation Рё testSolveQuadraticEquation,
-//!        РєРѕС‚РѕСЂС‹Рµ РІ СЃРІРѕСЋ РѕС‡РµСЂРµРґСЊ РїСЂРѕРІРµСЂСЏС‚ РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ СЂР°Р±РѕС‚С‹ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ РёРј
-//!        С„СѓРЅРєС†РёРё: isLessZero, isEqualZero, solveLinearEquation Рё solveQuadraticEquation.
+//! @note  Функция testProgram вызывает тестирующие функции: testIsLessZero,
+//!        testIsEqualZero, testSolveLinearEquation и testSolveQuadraticEquation,
+//!        которые в свою очередь проверят на корректность работы соответствующие им
+//!        функции: isLessZero, isEqualZero, solveLinearEquation и solveQuadraticEquation.
 //------------------------------------------------------------------------------------------
+
 void testProgram()
 {
-    testIsLessZeroAndIsEqualZero(-1.0f,    true,  false);
-    testIsLessZeroAndIsEqualZero(-0.0011f, true,  false);
-    testIsLessZeroAndIsEqualZero(-0.001f,  false, true);
-    testIsLessZeroAndIsEqualZero( 0.0f,    false, true);
-    testIsLessZeroAndIsEqualZero( 0.001f,  false, true);
-    testIsLessZeroAndIsEqualZero( 0.0011f, false, false);
-    testIsLessZeroAndIsEqualZero( 1.0f,    false, false);
+    testCompareZero(-1.0f,    -1);
+    testCompareZero(-0.0011f, -1);
+    testCompareZero(-0.001f,   0);
+    testCompareZero( 0.0f,     0);
+    testCompareZero( 0.001f,   0);
+    testCompareZero( 0.0011f,  1);
+    testCompareZero( 1.0f,     1);
 
     testSolveLinearEquation(0, 0,  0, INF_ROOTS);
     testSolveLinearEquation(0, 1,  0, 0);

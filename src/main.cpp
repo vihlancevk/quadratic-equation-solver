@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------------------
+//==========================================================================================
 //! @brief Вычисление корней квадратного уравнения.
 //!
 //! @author Костя Вихлянцев (https://github.com/vihlancevk/quadratic-equation-solver)
@@ -7,12 +7,13 @@
 //!
 //! @copyright Copyright (c) 2021
 //------------------------------------------------------------------------------------------
-#include<stdio.h>
-#include"testProgram.h"
-#include"userInteraction.h"
-#include"equationSolution.h"
 
-int main(int argc, char *argv[])
+#include <stdio.h>
+#include "testProgram.h"
+#include "userInteraction.h"
+#include "equationSolving.h"
+
+int main(const int argc, const char *argv[])
 {
     processCommandLineArguments(argc, argv);
 
