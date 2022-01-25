@@ -1,0 +1,5 @@
+src/bin/
+src/obj/
+src/QuadraticEquationSolver.cbp
+src/QuadraticEquationSolver.layout
+src/QuadraticEquationSolver.depend
