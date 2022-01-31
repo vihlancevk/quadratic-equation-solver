@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
-#include "../libs/userInteraction.h"
-#include "../libs/equationSolving.h"
+#include "../include/userInteraction.h"
+#include "../include/equationSolving.h"
 
 //==========================================================================================
 //! @brief Очистка ввода с консоли.

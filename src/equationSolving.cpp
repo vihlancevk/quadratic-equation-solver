@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <math.h>
-#include "../libs/equationSolving.h"
+#include "../include/equationSolving.h"
 
 const float PRECISION = 0.001f;
 

@@ -9,9 +9,9 @@
 //------------------------------------------------------------------------------------------
 
 #include <stdio.h>
-#include "../libs/testProgram.h"
-#include "../libs/userInteraction.h"
-#include "../libs/equationSolving.h"
+#include "../include/testProgram.h"
+#include "../include/userInteraction.h"
+#include "../include/equationSolving.h"
 
 int main(const int argc, const char *argv[])
 {

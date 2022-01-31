@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include "../libs/testProgram.h"
-#include "../libs/userInteraction.h"
-#include "../libs/equationSolving.h"
+#include "../include/testProgram.h"
+#include "../include/userInteraction.h"
+#include "../include/equationSolving.h"
 
 //==========================================================================================
 //! @brief Тестирование функции compareZero на корректность работы.
