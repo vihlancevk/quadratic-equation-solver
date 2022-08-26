@@ -15,8 +15,7 @@
 //! @note В случае коректной работы функции compareZero, в консоль будет выведенно
 //!       соответствующее сообщение.
 //------------------------------------------------------------------------------------------
-
-void testCompareZero(float number, int correctAnswer)
+void testCompareZero(double number, int correctAnswer)
 {
     int returnAnswer = compareZero(number);
 
@@ -41,10 +40,9 @@ void testCompareZero(float number, int correctAnswer)
 //! @note В случае коректной работы функции solveLinearEquation, в консоль будет выведенно
 //!       соответствующее сообщение.
 //------------------------------------------------------------------------------------------
-
-void testSolveLinearEquation(float a, float b, float correctX, int correctRootsCount)
+void testSolveLinearEquation(double a, double b, double correctX, int correctRootsCount)
 {
-    float x = 0;
+    double x = 0;
     int rootsCount = solveLinearEquation(a, b, &x);
 
     printf("[%s]solveLinearEquation(%.3f, %.3f) returned: "
@@ -73,10 +71,9 @@ void testSolveLinearEquation(float a, float b, float correctX, int correctRootsC
 //! @note В случае коректной работы функции solveQuadraticEquation, в консоль будет выведенно
 //!       соответствующее сообщение.
 //------------------------------------------------------------------------------------------
-
-void testSolveQuadraticEquation(float a, float b, float c, float correctX1, float correctX2, int correctRootsCount)
+void testSolveQuadraticEquation(double a, double b, double c, double correctX1, double correctX2, int correctRootsCount)
 {
-    float x1 = 0, x2 = 0;
+    double x1 = 0, x2 = 0;
     int rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
 
     printf("[%s]solveQuadraticEquation(%.3f, %.3f, %.3f) returned: "
@@ -95,9 +92,12 @@ void testSolveQuadraticEquation(float a, float b, float c, float correctX1, floa
 //! @note В случае, если одним из элементов массива argv будет строка "--test"
 //!       или "-t", то будет вызвана функция testProgram.
 //------------------------------------------------------------------------------------------
-
 void processCommandLineArguments(const int argc, const char *argv[])
 {
+    #ifdef DEBUG
+        testProgram();
+    #endif
+
     for (int i = 0; i < argc; i += 1)
     {
         if (!strcmp(argv[i], "--test") || !strcmp(argv[i], "-t"))
@@ -116,7 +116,6 @@ void processCommandLineArguments(const int argc, const char *argv[])
 //!        которые в свою очередь проверят на корректность работы соответствующие им
 //!        функции: isLessZero, isEqualZero, solveLinearEquation и solveQuadraticEquation.
 //------------------------------------------------------------------------------------------
-
 void testProgram()
 {
     testCompareZero(-1.0f,    -1);
@@ -136,4 +135,3 @@ void testProgram()
     testSolveQuadraticEquation(1, 2,  1, -1, 0, 1);
     testSolveQuadraticEquation(1, 5, -6, -6, 1, 2);
 }
-

@@ -3,9 +3,11 @@
 
 const int INF_ROOTS = -1;
 
-int compareZero(float number);
-int solveLinearEquation(float a, float b, float *x);
-int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2);
+int compareZero(double number);
+
+int solveLinearEquation(double a, double b, double *x);
+
+int solveQuadraticEquation(double a, double b, double c, double *x1, double *x2);
 
 #endif
 

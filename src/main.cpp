@@ -15,15 +15,19 @@
 
 int main(const int argc, const char *argv[])
 {
+    #ifdef DEBUG
+        printf("Debug mode.\n");
+    #endif
+
     processCommandLineArguments(argc, argv);
 
     printf("Enter coefficients in quadratic equation in format a*x^2 + b*x + c = 0\n");
 
-    float a = readCoefficient('a');
-    float b = readCoefficient('b');
-    float c = readCoefficient('c');
+    double a = readCoefficient('a');
+    double b = readCoefficient('b');
+    double c = readCoefficient('c');
 
-    float x1 = 0, x2 = 0;
+    double x1 = 0, x2 = 0;
     int rootsCount = solveQuadraticEquation(a, b, c, &x1, &x2);
 
     outputAnswer(x1, x2, rootsCount);

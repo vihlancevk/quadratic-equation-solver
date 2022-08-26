@@ -2,8 +2,10 @@
 #define USERINTERACTION_H_
 
 void clearInputBuffer();
-float readCoefficient(char coefficientSymbol);
-void outputAnswer(float x1, float x2, int rootsCount);
+
+double readCoefficient(char coefficientSymbol);
+
+void outputAnswer(double x1, double x2, int rootsCount);
 
 #endif
 

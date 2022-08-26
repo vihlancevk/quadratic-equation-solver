@@ -2,7 +2,7 @@
 #include <math.h>
 #include "../include/equationSolving.h"
 
-const float PRECISION = 0.001f;
+const double PRECISION = 0.001f;
 
 //===========================================================================================
 //! @brief Вычисление корней квадратного уравнения.
@@ -18,16 +18,17 @@ const float PRECISION = 0.001f;
 //!
 //! @return Количество корней уравнения квадратного уравнения.
 //------------------------------------------------------------------------------------------
-
-int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2)
+int solveQuadraticEquation(double a, double b, double c, double *x1, double *x2)
 {
-    assert(isfinite(a));
-    assert(isfinite(b));
-    assert(isfinite(c));
+    #ifdef DEBUG
+        assert(isfinite(a));
+        assert(isfinite(b));
+        assert(isfinite(c));
 
-    assert(x1 != nullptr);
-    assert(x2 != nullptr);
-    assert(x1 != x2);
+        assert(x1 != nullptr);
+        assert(x2 != nullptr);
+        assert(x1 != x2);
+    #endif
 
     int rootsCount = 0;
 
@@ -51,8 +52,8 @@ int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2)
         }
     }
 
-    float D = b*b - 4*a*c;
-    float multiplier = 1/(a*2);
+    double D = b*b - 4*a*c;
+    double multiplier = 1/(a*2);
 
     if (compareZero(D) < 0)
     {
@@ -65,7 +66,7 @@ int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2)
     }
     else
     {
-        float sqrtD = sqrtf(D);
+        double sqrtD = sqrt(D);
         *x1 = (-b - sqrtD)*multiplier;
         *x2 = (-b + sqrtD)*multiplier;
         rootsCount = 2;
@@ -83,13 +84,14 @@ int solveQuadraticEquation(float a, float b, float c, float *x1, float *x2)
 //!
 //! @return Количество корней линейного уравнения.
 //------------------------------------------------------------------------------------------
-
-int solveLinearEquation(float a, float b, float *x)
+int solveLinearEquation(double a, double b, double *x)
 {
-    assert(isfinite(a));
-    assert(isfinite(b));
+    #ifdef DEBUG
+        assert(isfinite(a));
+        assert(isfinite(b));
 
-    assert(x != nullptr);
+        assert(x != nullptr);
+    #endif
 
     int rootsCount = 0;
 
@@ -125,8 +127,7 @@ int solveLinearEquation(float a, float b, float *x)
 //!         2)  0, если число number равно нулю;
 //!         3) -1, если число number меньше нуля.
 //------------------------------------------------------------------------------------------
-
-int compareZero(float number)
+int compareZero(double number)
 {
     if (number > 0 + PRECISION)
     {
@@ -141,4 +142,3 @@ int compareZero(float number)
         return -1;
     }
 }
-

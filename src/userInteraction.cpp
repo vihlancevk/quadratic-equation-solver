@@ -7,7 +7,6 @@
 //==========================================================================================
 //! @brief Очистка ввода с консоли.
 //------------------------------------------------------------------------------------------
-
 void clearInputBuffer()
 {
     while (getchar() != '\n');
@@ -24,13 +23,12 @@ void clearInputBuffer()
 //!
 //! @return Введённое с консоли число.
 //------------------------------------------------------------------------------------------
-
-float readCoefficient(char coefficientSymbol)
+double readCoefficient(char coefficientSymbol)
 {
-    float number = 0;
+    double number = 0;
 
     printf("%c: ", coefficientSymbol);
-    int isCorrectInput = scanf("%f", &number);
+    int isCorrectInput = scanf("%lf", &number);
 
     while (isCorrectInput == 0 || getchar() != '\n')
     {
@@ -38,7 +36,7 @@ float readCoefficient(char coefficientSymbol)
 
         printf("Please, enter the correct value for the coefficient\n");
         printf("%c: ", coefficientSymbol);
-        isCorrectInput = scanf("%f", &number);
+        isCorrectInput = scanf("%lf", &number);
     }
 
     return number;
@@ -69,19 +67,19 @@ float readCoefficient(char coefficientSymbol)
 //!          то в консоль будет выведенно сообщение об ошибке:
 //!          Wrong parameter value rootsCount.
 //------------------------------------------------------------------------------------------
-
-void outputAnswer(float x1, float x2, int rootsCount)
+void outputAnswer(double x1, double x2, int rootsCount)
 {
-    assert(isfinite(x1));
-    assert(isfinite(x2));
+    #ifdef DEBUG
+        assert(isfinite(x1));
+        assert(isfinite(x2));
+    #endif
 
     switch (rootsCount)
     {
-        case 0:         { printf("No valid roots");                                               break; }
-        case 1:         { printf("The quadratic equation has only one root:\n%.3f",      x1);     break; }
-        case 2:         { printf("The quadratic equation has two roots:\n%.3f and %.3f", x1, x2); break; }
-        case INF_ROOTS: { printf("Infinitely many roots");                                        break; }
-        default:        { printf("Wrong parameter value rootsCount");                             break; }
+        case 0:         { printf("No valid roots\n");                                               break; }
+        case 1:         { printf("The quadratic equation has only one root:\n%.3f\n",      x1);     break; }
+        case 2:         { printf("The quadratic equation has two roots:\n%.3f and %.3f\n", x1, x2); break; }
+        case INF_ROOTS: { printf("Infinitely many roots\n");                                        break; }
+        default:        { printf("Wrong parameter value rootsCount\n");                             break; }
     }
 }
-
