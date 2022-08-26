@@ -15,6 +15,11 @@
 
 int main(const int argc, const char *argv[])
 {
+    #ifdef TESTS
+        testProgram();
+        return 0;
+    #endif
+
     #ifdef DEBUG
         printf("Debug mode.\n");
     #endif

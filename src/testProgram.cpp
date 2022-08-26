@@ -94,10 +94,6 @@ void testSolveQuadraticEquation(double a, double b, double c, double correctX1, 
 //------------------------------------------------------------------------------------------
 void processCommandLineArguments(const int argc, const char *argv[])
 {
-    #ifdef DEBUG
-        testProgram();
-    #endif
-
     for (int i = 0; i < argc; i += 1)
     {
         if (!strcmp(argv[i], "--test") || !strcmp(argv[i], "-t"))
